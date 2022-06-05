@@ -1,18 +1,28 @@
 # syntax=docker/dockerfile:1.4.1
 FROM openjdk:17-alpine3.14
 
-RUN addgroup --gid 1001 multipaper && \
-    adduser --home /multipaper --uid 1001 -S -G multipaper multipaper
-
+# Versioning
 ARG VERSION=1.18.2
 ARG BUILD=65
 ARG FULL_VERSION="$VERSION-$BUILD"
 
+# Setup groups and install dumb init
+RUN addgroup --gid 1001 multipaper && \
+    adduser --home /multipaper --uid 1001 -S -G multipaper multipaper && \
+    apk add --no-cache dumb-init=1.2.5-r1
+
+# Use the multipaper's home directory as our work directory
 WORKDIR /multipaper
 
+# Switch from root to multipaper
 USER multipaper
+
+# Download multipaper
 ADD --chown=multipaper:multipaper https://multipaper.io/api/v2/projects/multipaper/versions/$VERSION/builds/$BUILD/downloads/multipaper-$FULL_VERSION.jar multipaper.jar
 
+# Expose the required ports
 EXPOSE 25565/tcp
 
+# Start the process using dumb-init
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 CMD ["java", "-jar", "multipaper.jar"]
