@@ -1,12 +1,12 @@
 # syntax=docker/dockerfile:1.4.1
-FROM openjdk:17-alpine3.14
-
-RUN addgroup --gid 1001 multipaper && \
-    adduser --home /multipaper --uid 1001 -S -G multipaper multipaper
+FROM eclipse-temurin:17.0.3_7-jre-alpine
 
 ARG VERSION=1.18.2
 ARG BUILD=65
 ARG FULL_VERSION="$VERSION-$BUILD"
+
+RUN addgroup --gid 1001 multipaper && \
+    adduser --home /multipaper --uid 1001 -S -G multipaper multipaper
 
 WORKDIR /multipaper
 

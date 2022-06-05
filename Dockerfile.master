@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.4.1
-FROM openjdk:17-alpine3.14
+FROM eclipse-temurin:17.0.3_7-jre-alpine
 
 ARG MULTIPAPER_VERSION=1.18.2
 ARG MULTIPAPER_BUILD=65
