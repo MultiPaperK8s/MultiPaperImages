@@ -13,7 +13,9 @@ WORKDIR /multipaper
 USER multipaper
 ADD --chown=multipaper:multipaper https://multipaper.io/api/v2/projects/multipaper/versions/$MULTIPAPER_VERSION/builds/$MULTIPAPER_BUILD/downloads/MultiPaper-Master-$MASTER_VERSION-all.jar multipaper-master.jar
 
+CMD ["java", "-jar", "/multipaper/multipaper-master.jar"]
+
+WORKDIR /multipaper/data
+
 EXPOSE 35353/tcp
 EXPOSE 25565/tcp
-
-CMD ["java", "-jar", "multipaper-master.jar"]
