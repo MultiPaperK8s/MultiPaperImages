@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.4.1
-FROM openjdk:17-alpine3.14
+FROM eclipse-temurin:17.0.3_7-jre-alpine
 
 # Versioning
 ARG MULTIPAPER_VERSION=1.18.2
@@ -20,10 +20,13 @@ USER multipaper
 # Download multipaper
 ADD --chown=multipaper:multipaper https://multipaper.io/api/v2/projects/multipaper/versions/$MULTIPAPER_VERSION/builds/$MULTIPAPER_BUILD/downloads/MultiPaper-Master-$MASTER_VERSION-all.jar multipaper-master.jar
 
-# Expose the required ports
+# Expose the ports of the master server and proxy
 EXPOSE 35353/tcp
 EXPOSE 25565/tcp
 
 # Start the process using dumb-init
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-CMD ["java", "-jar", "multipaper-master.jar"]
+CMD ["java", "-jar", "/multipaper/multipaper-master.jar"]
+
+# Switch to the data directory
+WORKDIR /multipaper/data
