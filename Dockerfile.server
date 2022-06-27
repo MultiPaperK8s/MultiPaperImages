@@ -1,7 +1,9 @@
 # syntax=docker/dockerfile:1.4.1
 FROM eclipse-temurin:17.0.3_7-jre-alpine
+
+# Versioning
 ARG VERSION=1.18.2
-ARG BUILD=65
+ARG BUILD=95
 ARG FULL_VERSION="$VERSION-$BUILD"
 
 # Setup groups and install dumb init
