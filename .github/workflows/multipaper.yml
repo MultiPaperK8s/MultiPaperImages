@@ -28,7 +28,7 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: ghcr.io 
-        username: ${{ github.actor }}
+        username: MultiPaperK8s
         password: $GITHUB_TOKEN
 
     - name: Docker meta for MultiPaperK8s/multipaper-master
