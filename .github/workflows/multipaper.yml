@@ -46,7 +46,6 @@ jobs:
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ steps.multipaper-master-meta.outputs.tags }}
         labels: ${{ steps.multipaper-master-meta.outputs.labels }}
-        target: multipaper-master
 
     - name: Docker meta for MultiPaperK8s/multipaper
       id: multipaper-server-meta
@@ -63,4 +62,3 @@ jobs:
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ steps.multipaper-server-meta.outputs.tags }}
         labels: ${{ steps.multipaper-server-meta.outputs.labels }}
-        target: multipaper-server
