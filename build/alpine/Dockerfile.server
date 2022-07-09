@@ -6,7 +6,7 @@ RUN apk add --no-cache zip=3.0-r9 unzip=6.0-r9 binutils=2.38-r3
 
 # Create a custom Java runtime for MultiPaper Server
 RUN jlink \
-        --add-modules java.base,java.compiler,java.logging,java.management,java.net.http,java.sql,java.desktop,java.security.sasl,java.naming,java.transaction.xa,java.xml,jdk.crypto.ec,jdk.zipfs,jdk.unsupported \
+        --add-modules java.base,java.compiler,java.logging,java.management,java.net.http,java.sql,java.desktop,java.security.sasl,java.naming,java.transaction.xa,java.xml,jdk.crypto.ec,jdk.zipfs,jdk.security.auth,jdk.unsupported \
         --strip-debug \
         --no-man-pages \
         --no-header-files \
