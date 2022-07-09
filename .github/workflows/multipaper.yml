@@ -35,12 +35,12 @@ jobs:
       id: multipaper-master-meta
       uses: docker/metadata-action@v4
       with:
-        images: ghcr.io/${{ github.repository_owner }}/multipaper-master
+        images: ghcr.io/${{ github.repository_owner }}/multipaper-master-alpine
 
     - name: Build and push multipaper-master for ${{ env.TARGET_PLATFORMS }}
       uses: docker/build-push-action@v3
       with:
-        context: .
+        context: ./build/alpine
         file: Dockerfile.master
         platforms: ${{ env.TARGET_PLATFORMS }}
         push: ${{ github.event_name != 'pull_request' }}
@@ -51,12 +51,12 @@ jobs:
       id: multipaper-server-meta
       uses: docker/metadata-action@v4
       with:
-        images: ghcr.io/MultiPaperK8s/multipaper
+        images: ghcr.io/MultiPaperK8s/multipaper-alpine
 
     - name: Build and push multipaper for ${{ env.TARGET_PLATFORMS }}
       uses: docker/build-push-action@v3
       with:
-        context: .
+        context: ./build/alpine
         file: Dockerfile.server
         platforms: ${{ env.TARGET_PLATFORMS }}
         push: ${{ github.event_name != 'pull_request' }}

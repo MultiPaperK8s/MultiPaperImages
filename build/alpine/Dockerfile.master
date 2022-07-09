@@ -1,0 +1,60 @@
+# syntax=docker/dockerfile:1.4.1
+FROM eclipse-temurin:17.0.3_7-jdk-alpine AS jre-build
+
+# Add dependencies necessary to run jlink
+RUN apk add --no-cache zip=3.0-r9 unzip=6.0-r9 binutils=2.38-r3
+
+# Create a custom Java runtime for MultiPaper Server
+RUN jlink \
+        --add-modules java.base,java.desktop,java.logging,java.naming,java.xml,jdk.sctp,jdk.unsupported \
+        --strip-debug \
+        --no-man-pages \
+        --no-header-files \
+        --compress=2 \
+        --output /multipaper/java
+
+FROM alpine:3.16
+
+# Initialising language
+ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
+
+# Setting up Java
+ENV JAVA_HOME=/opt/java/openjdk \
+    PATH="/opt/java/openjdk/bin:$PATH"
+
+## Taken from eclipse-temurin setup, but with version pinning
+RUN apk add --no-cache libretls=3.5.2-r0 musl-locales=0.1.0-r0 musl-locales-lang=0.1.0-r0 tzdata=2022a-r0 zlib=1.2.12-r1 \
+    && rm -rf /var/cache/apk/*
+
+COPY --from=jre-build /multipaper/java $JAVA_HOME
+
+# Versioning
+ARG MULTIPAPER_VERSION=1.18.2
+ARG MULTIPAPER_BUILD=95
+ARG MASTER_VERSION=2.8.8
+
+# Setup groups and install dumb init
+RUN addgroup -S -g 1001 multipaper && \
+    adduser -S -h /multipaper -u 1001 -g 1001 multipaper && \
+    apk add --no-cache dumb-init=1.2.5-r1 && \
+    rm -rf /var/cache/apk/*
+
+# Use the multipaper's home directory as our work directory
+WORKDIR /multipaper
+
+# Switch from root to multipaper
+USER multipaper
+
+# Download multipaper
+ADD --chown=multipaper:multipaper https://multipaper.io/api/v2/projects/multipaper/versions/$MULTIPAPER_VERSION/builds/$MULTIPAPER_BUILD/downloads/MultiPaper-Master-$MASTER_VERSION-all.jar multipaper-master.jar
+
+# Expose the ports of the master server and proxy
+EXPOSE 35353/tcp
+EXPOSE 25565/tcp
+
+# Start the process using dumb-init
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+CMD ["java", "-jar", "/multipaper/multipaper-master.jar"]
+
+# Switch to the data directory
+WORKDIR /multipaper/data
