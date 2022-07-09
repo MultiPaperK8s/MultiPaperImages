@@ -41,7 +41,7 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         context: ./build/alpine
-        file: Dockerfile.master
+        file: build/alpine/Dockerfile.master
         platforms: ${{ env.TARGET_PLATFORMS }}
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ steps.multipaper-master-meta.outputs.tags }}
@@ -57,7 +57,7 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         context: ./build/alpine
-        file: Dockerfile.server
+        file: build/alpine/Dockerfile.server
         platforms: ${{ env.TARGET_PLATFORMS }}
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ steps.multipaper-server-meta.outputs.tags }}
