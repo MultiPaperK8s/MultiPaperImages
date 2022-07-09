@@ -5,6 +5,64 @@ env:
   TARGET_PLATFORMS: linux/amd64,linux/arm64,linux/arm/v7
 
 jobs:
+
+  build-multipaper-docker-debian:
+
+      runs-on: ubuntu-latest
+
+      steps:
+
+      - uses: actions/checkout@v3
+        name: Checkout repository
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+        with:
+          install: true     
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io 
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker meta for MultiPaperK8s/multipaper-master
+        id: multipaper-master-meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/multipaper-master-debian-unstable
+
+      - name: Build and push multipaper-master for ${{ env.TARGET_PLATFORMS }}
+        uses: docker/build-push-action@v3
+        with:
+          context: ./build/debian-slim
+          file: build/debian-slim/Dockerfile.master
+          platforms: ${{ env.TARGET_PLATFORMS }}
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.multipaper-master-meta.outputs.tags }}
+          labels: ${{ steps.multipaper-master-meta.outputs.labels }}
+
+      - name: Docker meta for MultiPaperK8s/multipaper
+        id: multipaper-server-meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ghcr.io/MultiPaperK8s/multipaper-debian-unstable
+
+      - name: Build and push multipaper for ${{ env.TARGET_PLATFORMS }}
+        uses: docker/build-push-action@v3
+        with:
+          context: ./build/debian-slim
+          file: build/debian-slim/Dockerfile.server
+          platforms: ${{ env.TARGET_PLATFORMS }}
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.multipaper-server-meta.outputs.tags }}
+          labels: ${{ steps.multipaper-server-meta.outputs.labels }}
+
   build-multipaper-docker-ubuntu:
 
       runs-on: ubuntu-latest
