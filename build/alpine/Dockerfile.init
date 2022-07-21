@@ -6,6 +6,7 @@ RUN addgroup --gid 1001 multipaper && \
 
 RUN apk add --no-cache --update libintl=0.21-r2 && \
     apk add --no-cache --virtual build_deps gettext=0.21-r2 && \
+    apk add --no-cache curl=7.83.1-r2 && \
     cp /usr/bin/envsubst /usr/local/bin/envsubst && \ 
     apk del build_deps
 
