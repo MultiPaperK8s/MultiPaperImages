@@ -10,6 +10,4 @@ RUN apk add --no-cache --update libintl=0.21-r2 && \
     cp /usr/bin/envsubst /usr/local/bin/envsubst && \ 
     apk del build_deps
 
-COPY scripts/get-plugins.sh /scripts/get-plugins.sh
-
 USER multipaper
