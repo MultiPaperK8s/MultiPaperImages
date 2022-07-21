@@ -1,1 +1,1 @@
-curl -K /tmp/multipaper/plugin_urls.txt
+curl -K /multipaper/data/plugin_urls.txt
