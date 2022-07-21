@@ -33,6 +33,22 @@ jobs:
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Docker meta for MultiPaperK8s/multipaper-init
+      id: multipaper-init-meta
+      uses: docker/metadata-action@v4
+      with:
+        images: ghcr.io/${{ github.repository_owner }}/multipaper-init-alpine-unstable
+
+    - name: Build and push multipaper-init for ${{ env.TARGET_PLATFORMS_ALPINE }}
+      uses: docker/build-push-action@v3
+      with:
+        context: ./build/alpine
+        file: build/alpine/Dockerfile.init
+        platforms: ${{ env.TARGET_PLATFORMS }}
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.multipaper-init-meta.outputs.tags }}
+        labels: ${{ steps.multipaper-init-meta.outputs.labels }}
+
     - name: Docker meta for MultiPaperK8s/multipaper-master
       id: multipaper-master-meta
       uses: docker/metadata-action@v4
