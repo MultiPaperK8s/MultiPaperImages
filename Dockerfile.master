@@ -2,9 +2,9 @@
 FROM eclipse-temurin:17.0.3_7-jre-alpine
 
 # Versioning
-ARG MULTIPAPER_VERSION=1.18.2
-ARG MULTIPAPER_BUILD=95
-ARG MASTER_VERSION=2.8.8
+ARG MULTIPAPER_VERSION=1.19.2
+ARG MULTIPAPER_BUILD=35
+ARG MASTER_VERSION=2.10.1
 
 # Setup groups and install dumb init
 RUN addgroup --gid 1001 multipaper && \
