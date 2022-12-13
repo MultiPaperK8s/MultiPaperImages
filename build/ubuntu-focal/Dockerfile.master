@@ -1,15 +1,15 @@
 # syntax=docker/dockerfile:1.4.1
-FROM eclipse-temurin:17.0.3_7-jre
+FROM eclipse-temurin:17.0.5_8-jre-focal
 
 # Versioning
-ARG MULTIPAPER_VERSION=1.18.2
-ARG MULTIPAPER_BUILD=95
-ARG MASTER_VERSION=2.8.8
+ARG MULTIPAPER_VERSION=1.19.2
+ARG MULTIPAPER_BUILD=37
+ARG MASTER_VERSION=2.10.1
 
 # Setup groups and install dumb init
 RUN addgroup --gid 1001 multipaper && \
     adduser --system --home /multipaper --uid 1001 --gid 1001 multipaper && \
-    apt update && apt install -y --no-install-recommends dumb-init=1.2.5-2
+    apt update && apt install -y --no-install-recommends dumb-init=1.2.2-1.2
 
 # Use the multipaper's home directory as our work directory
 WORKDIR /multipaper

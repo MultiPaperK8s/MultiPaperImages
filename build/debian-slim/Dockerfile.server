@@ -1,0 +1,58 @@
+# syntax=docker/dockerfile:1.4.1
+FROM eclipse-temurin:17.0.5_8-jdk AS jre-build
+
+# Create a custom Java runtime for MultiPaper Server
+RUN jlink \
+        --add-modules java.base,java.compiler,java.logging,java.management,java.net.http,java.sql,java.desktop,java.security.sasl,java.naming,java.transaction.xa,java.xml,jdk.crypto.ec,jdk.zipfs,jdk.security.auth,jdk.unsupported \
+        --strip-debug \
+        --no-man-pages \
+        --no-header-files \
+        --compress=2 \
+        --output /multipaper/java
+
+FROM debian:stable-20221205-slim
+
+# Initialising language
+ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
+
+# Setting up Java
+ENV JAVA_HOME=/opt/java/openjdk \
+    PATH="/opt/java/openjdk/bin:$PATH"
+
+## Taken from eclipse-temurin setup, but with version pinning and dumb-init
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata=2021a-1+deb11u8 curl=7.74.0-1.3+deb11u3 ca-certificates=20210119 fontconfig=2.13.1-4.2 locales=2.31-13+deb11u4 binutils=2.35.2-2 dumb-init=1.2.5-1 \
+    && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
+    && locale-gen en_US.UTF-8 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy over JRE
+COPY --from=jre-build /multipaper/java $JAVA_HOME
+
+# Versioning
+ARG VERSION=1.19.2
+ARG BUILD=37
+ARG FULL_VERSION="$VERSION-$BUILD"
+
+# Setup groups 
+RUN addgroup --gid 1001 multipaper && \
+    adduser --system --home /multipaper --uid 1001 --gid 1001 multipaper
+
+# Use the multipaper's home directory as our work directory
+WORKDIR /multipaper
+
+# Switch from root to multipaper
+USER multipaper
+
+# Download multipaper
+ADD --chown=multipaper:multipaper https://multipaper.io/api/v2/projects/multipaper/versions/$VERSION/builds/$BUILD/downloads/multipaper-$FULL_VERSION.jar multipaper.jar
+
+# Expose the required ports
+EXPOSE 25565/tcp
+
+# Start the process using dumb-init
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+CMD ["java", "-jar", "/multipaper/multipaper.jar"]
+
+# Switch to the data directory
+WORKDIR /multipaper/data
