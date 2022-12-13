@@ -3,6 +3,7 @@ name: Build Docker Images
 on: [push, pull_request]
 env:
   TARGET_PLATFORMS_ALPINE: linux/amd64,linux/arm64,linux/arm/v7
+  TARGET_PLATFORMS_DEBIAN: linux/amd64,linux/arm64
   TARGET_PLATFORMS: linux/amd64,linux/arm64,linux/arm/v7
 
 jobs:
@@ -79,12 +80,12 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository_owner }}/multipaper-master-debian-unstable
 
-      - name: Build and push multipaper-master for ${{ env.TARGET_PLATFORMS }}
+      - name: Build and push multipaper-master for ${{ env.TARGET_PLATFORMS_DEBIAN }}
         uses: docker/build-push-action@v3
         with:
           context: ./build/debian-slim
           file: build/debian-slim/Dockerfile.master
-          platforms: ${{ env.TARGET_PLATFORMS }}
+          platforms: ${{ env.TARGET_PLATFORMS_DEBIAN }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.multipaper-master-meta.outputs.tags }}
           labels: ${{ steps.multipaper-master-meta.outputs.labels }}
@@ -95,12 +96,12 @@ jobs:
         with:
           images: ghcr.io/MultiPaperK8s/multipaper-debian-unstable
 
-      - name: Build and push multipaper for ${{ env.TARGET_PLATFORMS }}
+      - name: Build and push multipaper for ${{ env.TARGET_PLATFORMS_DEBIAN }}
         uses: docker/build-push-action@v3
         with:
           context: ./build/debian-slim
           file: build/debian-slim/Dockerfile.server
-          platforms: ${{ env.TARGET_PLATFORMS }}
+          platforms: ${{ env.TARGET_PLATFORMS_DEBIAN }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.multipaper-server-meta.outputs.tags }}
           labels: ${{ steps.multipaper-server-meta.outputs.labels }}
