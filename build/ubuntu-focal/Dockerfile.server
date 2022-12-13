@@ -9,7 +9,7 @@ ARG FULL_VERSION="$VERSION-$BUILD"
 # Setup groups and install dumb init
 RUN addgroup --gid 1001 multipaper && \
     adduser --system --home /multipaper --uid 1001 --gid 1001 multipaper && \
-    apt update && apt install -y --no-install-recommends dumb-init=1.2.5-2
+    apt update && apt install -y --no-install-recommends dumb-init=1.2.2-1.2
 
 # Use the multipaper's home directory as our work directory
 WORKDIR /multipaper

@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add ubuntu-jammy distribution (build + Docker support)
 - Add ubuntu-focal distribution (build + Docker support)
 
-## Changed
+### Changed
 - Update Eclipse Temurin Ubuntu image from 17.0.3_7-jre -> 17.0.5_8-jre-(jammy|focal)
 - Update Eclipse Temurin Debian image from 17.0.3_7-jdk -> 17.0.5_8-jdk
 - Update Debian slim image from stable-20220622-slim -> stable-20221205-slim
@@ -20,9 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update Alpine init image from Alpine 3.16.0 -> 3.17.0
 - Update Alpine init image dependency libintl 0.21-r2 -> 0.21.1-r1
 - Update Alpine init image dependency gettext 0.21-r2 -> 0.21.1-r1
+- Downgrade Ubuntu focal dependency dumb-init 1.2.5-2 -> 1.2.2-1.2
 - Update Multipaper to 1.19.2
 
-## Removed
+### Removed
 - Generic ubuntu distribution
 
 ## [0.1.2] - 2022-06-07
