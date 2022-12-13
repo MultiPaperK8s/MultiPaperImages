@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.4.1
-FROM eclipse-temurin:17.0.3_7-jdk AS jre-build
+FROM eclipse-temurin:17.0.5_8-jdk AS jre-build
 
 # Create a custom Java runtime for MultiPaper Server
 RUN jlink \
@@ -10,7 +10,7 @@ RUN jlink \
         --compress=2 \
         --output /multipaper/java
 
-FROM debian:stable-20220622-slim
+FROM debian:stable-20221205-slim
 
 # Initialising language
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
@@ -21,7 +21,7 @@ ENV JAVA_HOME=/opt/java/openjdk \
 
 ## Taken from eclipse-temurin setup, but with version pinning and dumb-init
 RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata=2021a-1+deb11u4 curl=7.74.0-1.3+deb11u1 ca-certificates=20210119 fontconfig=2.13.1-4.2 locales=2.31-13+deb11u3 binutils=2.35.2-2 dumb-init=1.2.5-1 \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata=2021a-1+deb11u5 curl=7.74.0-1.3+deb11u3 ca-certificates=20210119 fontconfig=2.13.1-4.2 locales=2.31-13+deb11u4 binutils=2.35.2-2 dumb-init=1.2.5-1 \
     && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
     && locale-gen en_US.UTF-8 \
     && rm -rf /var/lib/apt/lists/*
@@ -30,9 +30,9 @@ RUN apt-get update \
 COPY --from=jre-build /multipaper/java $JAVA_HOME
 
 # Versioning
-ARG MULTIPAPER_VERSION=1.18.2
-ARG MULTIPAPER_BUILD=95
-ARG MASTER_VERSION=2.8.8
+ARG MULTIPAPER_VERSION=1.19.2
+ARG MULTIPAPER_BUILD=37
+ARG MASTER_VERSION=2.10.1
 
 # Setup groups 
 RUN addgroup --gid 1001 multipaper && \

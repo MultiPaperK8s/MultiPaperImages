@@ -1,0 +1,32 @@
+# syntax=docker/dockerfile:1.4.1
+FROM eclipse-temurin:17.0.5_8-jre-focal
+
+# Versioning
+ARG MULTIPAPER_VERSION=1.19.2
+ARG MULTIPAPER_BUILD=37
+ARG MASTER_VERSION=2.10.1
+
+# Setup groups and install dumb init
+RUN addgroup --gid 1001 multipaper && \
+    adduser --system --home /multipaper --uid 1001 --gid 1001 multipaper && \
+    apt update && apt install -y --no-install-recommends dumb-init=1.2.5-2
+
+# Use the multipaper's home directory as our work directory
+WORKDIR /multipaper
+
+# Switch from root to multipaper
+USER multipaper
+
+# Download multipaper
+ADD --chown=multipaper:multipaper https://multipaper.io/api/v2/projects/multipaper/versions/$MULTIPAPER_VERSION/builds/$MULTIPAPER_BUILD/downloads/MultiPaper-Master-$MASTER_VERSION-all.jar multipaper-master.jar
+
+# Expose the ports of the master server and proxy
+EXPOSE 35353/tcp
+EXPOSE 25565/tcp
+
+# Start the process using dumb-init
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+CMD ["java", "-jar", "/multipaper/multipaper-master.jar"]
+
+# Switch to the data directory
+WORKDIR /multipaper/data
