@@ -94,7 +94,7 @@ jobs:
         id: multipaper-server-meta
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/MultiPaperK8s/multipaper-debian-unstable
+          images: ghcr.io/${{ github.repository_owner }}/multipaper-debian-unstable
 
       - name: Build and push multipaper for ${{ env.TARGET_PLATFORMS_DEBIAN }}
         uses: docker/build-push-action@v3

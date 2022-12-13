@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update Alpine init image dependency libintl 0.21-r2 -> 0.21.1-r1
 - Update Alpine init image dependency gettext 0.21-r2 -> 0.21.1-r1
 - Downgrade Ubuntu focal dependency dumb-init 1.2.5-2 -> 1.2.2-1.2
+- Building Debian Slim now only for AMD64 and ARM64v8 (Aarch64)
 - Update Multipaper to 1.19.2
 
 ### Removed
