@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update Eclipse Temurin Ubuntu image from 17.0.3_7-jre -> 17.0.5_8-jre-(jammy|focal)
 - Update Eclipse Temurin Debian image from 17.0.3_7-jdk -> 17.0.5_8-jdk
 - Update Debian slim image from stable-20220622-slim -> stable-20221205-slim
-- Update Debian slim dependency tzdata 2021a-1+deb11u4 -> 2021a-1+deb11u5
+- Update Debian slim dependency tzdata (using bullseye-updates repository) 2021a-1+deb11u4 -> 2021a-1+deb11u8
 - Update Debian slim dependency curl 7.74.0-1.3+deb11u1 -> 7.74.0-1.3+deb11u3
 - Update Debian slim dependency locales 2.31-13+deb11u3 -> 2.31-13+deb11u4
 - Docker images tags from Ubuntu generic to specific ((multipaper|multipaper-master) -> (multipaper|multipaper-master)-(jammy|focal))
